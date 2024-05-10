@@ -1,7 +1,7 @@
 import sql from 'mssql';
 
 export const getReservas = (req, res) => {
-	new sql.Request().query("SELECT * FROM BIBLIOTECA_RESERVAS", (err, result) => {
+	new sql.Request().query("SELECT * FROM BIBLIOTECA_RESERVAS R LEFT JOIN LIVROS L ON R.id_livro = L.id WHERE R.data_devolucao is null", (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
 		} else {
@@ -35,7 +35,7 @@ export const getReserva = (req, res) => {
 }
 
 export const patchReserva = (req, res) => {
-	new sql.Request().query(`UPDATE BIBLIOTECA_RESERVAS SET DATAHORA_DEVOLUCAO = GETDATE() WHERE ID = '${req.params.id}'`, (err, result) => {
+	new sql.Request().query(`UPDATE BIBLIOTECA_RESERVAS SET data_devolucao = GETDATE() WHERE id_reserva = '${req.params.id}'`, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
 		} else {
