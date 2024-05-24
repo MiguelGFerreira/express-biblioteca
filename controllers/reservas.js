@@ -1,7 +1,14 @@
 import sql from 'mssql';
 
 export const getReservas = (req, res) => {
-	new sql.Request().query("SELECT R.id, R.id_livro, L.titulo, R.matricula, R.data_emprestimo FROM BIBLIOTECA_RESERVAS R LEFT JOIN LIVROS L ON R.id_livro = L.id WHERE R.data_devolucao is null", (err, result) => {
+	const query = `
+		SELECT R.id, L.titulo, R.matricula, TRIM(RA_NOME) nome, CONVERT(VARCHAR,R.data_emprestimo,103) data_emprestimo,
+		ISNULL(CONVERT(VARCHAR,R.data_devolucao,103),'Não devolvido') data_devolucao
+		FROM BIBLIOTECA_RESERVAS R
+		INNER JOIN LIVROS L ON R.id_livro = L.id
+		LEFT JOIN FOLV2210..SRA010 RA ON RA_MAT = R.matricula
+	`
+	new sql.Request().query(query, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
 		} else {

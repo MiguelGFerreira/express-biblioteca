@@ -6,19 +6,21 @@ export const getLivros = (req, res) => {
 			console.error("Error executing query:", err);
 		} else {
 			res.send(result.recordset); // Send query result as response
-			console.log("Foi feito uma consulta na tabela LIVROS")
 		}
 	});
 }
 
 export const postLivros = (req, res) => {
-	new sql.Request().query(`INSERT INTO LIVROS VALUES(
+	const query = `INSERT INTO LIVROS VALUES(
 		'${req.body.titulo}'
 		,'${req.body.categoria}'
 		,'${req.body.subcategoria}'
 		,'${req.body.autor}'
-		,'${req.body.status}'
-		,'TESTE')`, (err, result) => {
+		,${req.body.paginas}
+		,'Ativo'
+		,'http://10.0.73.216:83/NodeBiblioteca/capas/${req.body.titulo}.jpg')`;
+	console.log(query);
+	new sql.Request().query(query, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
 		} else {
