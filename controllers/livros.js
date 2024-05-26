@@ -1,7 +1,12 @@
 import sql from 'mssql';
 
 export const getLivros = (req, res) => {
-	new sql.Request().query("SELECT * FROM LIVROS", (err, result) => {
+	const query = `
+	SELECT id, titulo, categoria, subcategoria, autor, paginas, status, link_capa
+	FROM LIVROS
+	WHERE ISNULL(deletado,'') = ''
+	`
+	new sql.Request().query(query, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
 		} else {
