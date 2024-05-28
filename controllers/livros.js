@@ -23,8 +23,11 @@ export const postLivros = (req, res) => {
 		,'${req.body.autor}'
 		,${req.body.paginas}
 		,'Ativo'
-		,'http://10.0.73.216:83/NodeBiblioteca/capas/${req.body.titulo}.jpg')`;
+		,'http://10.0.73.216:83/NodeBiblioteca/capas/${req.body.titulo}.jpg'
+		,null)`;
+
 	console.log(query);
+	
 	new sql.Request().query(query, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
@@ -52,6 +55,7 @@ export const patchLivro = (req, res) => {
 		colsArray.push(`${key} = '${req.body[key]}'`)
 	}
 	const query = `UPDATE LIVROS SET ${colsArray.join(', ')} WHERE id = ${req.params.id}`
+	console.log(query);
 	new sql.Request().query(query, (err, result) => {
 		if (err) {
 			console.error("Error executing query:", err);
